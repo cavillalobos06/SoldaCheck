@@ -1,4 +1,4 @@
-import { Camera, CheckCircle2, Wrench } from "lucide-react";
+import { Camera, CheckCircle2, Wrench, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { MachineStatus } from "@/lib/machines";
 
@@ -13,19 +13,44 @@ export function MachinePhoto({ className }: { className?: string }) {
   );
 }
 
-export function StatusBadge({ status, className }: { status: MachineStatus; className?: string }) {
-  const ok = status === "operativa";
-  const Icon = ok ? CheckCircle2 : Wrench;
+export function StatusBadge({ status, className }: { status: MachineStatus | string; className?: string }) {
+  if (status === "operativa") {
+    return (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold bg-success text-success-foreground",
+          className,
+        )}
+      >
+        <CheckCircle2 className="h-3.5 w-3.5" />
+        Buen estado / Operativa
+      </span>
+    );
+  }
+
+  if (status === "en_revision") {
+    return (
+      <span
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold bg-amber-500 text-white",
+          className,
+        )}
+      >
+        <AlertTriangle className="h-3.5 w-3.5" />
+        Para revisión
+      </span>
+    );
+  }
+
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold",
-        ok ? "bg-success text-success-foreground" : "bg-warning text-warning-foreground",
+        "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold bg-destructive text-destructive-foreground",
         className,
       )}
     >
-      <Icon className="h-3.5 w-3.5" />
-      {ok ? "Operativa" : "En mantenimiento"}
+      <Wrench className="h-3.5 w-3.5" />
+      En mantenimiento
     </span>
   );
 }

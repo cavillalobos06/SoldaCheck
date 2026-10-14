@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { AppHeader } from "@/components/AppHeader";
+import { AuthProvider } from "@/lib/auth-context";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -119,11 +120,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <AppHeader />
-      <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
-        <Outlet />
-      </main>
+      <AuthProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <AppHeader />
+        <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+          <Outlet />
+        </main>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
