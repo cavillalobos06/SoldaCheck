@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MaquinasIdIndexRouteImport } from './routes/maquinas.$id.index'
+import { Route as MaquinasIdChequeoRouteImport } from './routes/maquinas.$id.chequeo'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaquinasIdIndexRoute = MaquinasIdIndexRouteImport.update({
+  id: '/maquinas/$id/',
+  path: '/maquinas/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaquinasIdChequeoRoute = MaquinasIdChequeoRouteImport.update({
+  id: '/maquinas/$id/chequeo',
+  path: '/maquinas/$id/chequeo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/maquinas/$id/chequeo': typeof MaquinasIdChequeoRoute
+  '/maquinas/$id/': typeof MaquinasIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/maquinas/$id/chequeo': typeof MaquinasIdChequeoRoute
+  '/maquinas/$id': typeof MaquinasIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/maquinas/$id/chequeo': typeof MaquinasIdChequeoRoute
+  '/maquinas/$id/': typeof MaquinasIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/maquinas/$id/chequeo' | '/maquinas/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/maquinas/$id/chequeo' | '/maquinas/$id'
+  id: '__root__' | '/' | '/maquinas/$id/chequeo' | '/maquinas/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MaquinasIdChequeoRoute: typeof MaquinasIdChequeoRoute
+  MaquinasIdIndexRoute: typeof MaquinasIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maquinas/$id/': {
+      id: '/maquinas/$id/'
+      path: '/maquinas/$id'
+      fullPath: '/maquinas/$id/'
+      preLoaderRoute: typeof MaquinasIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maquinas/$id/chequeo': {
+      id: '/maquinas/$id/chequeo'
+      path: '/maquinas/$id/chequeo'
+      fullPath: '/maquinas/$id/chequeo'
+      preLoaderRoute: typeof MaquinasIdChequeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MaquinasIdChequeoRoute: MaquinasIdChequeoRoute,
+  MaquinasIdIndexRoute: MaquinasIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
