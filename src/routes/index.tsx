@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, Search, Shield } from "lucide-react";
+import { ChevronRight, Search, Shield, MapPin, Factory, CheckCircle2, AlertTriangle, Wrench } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "@/lib/machines";
 import { useAuth } from "@/lib/auth-context";
-import { MachinePhoto, StatusBadge } from "@/components/machine-ui";
+import { MachinePhoto, StatusBadge, KpiCard } from "@/components/machine-ui";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Listado de máquinas de soldadura y su último estado de inspección." },
       { property: "og:title", content: "Inventario de máquinas — SoldaCheck" },
       { property: "og:description", content: "Listado de máquinas de soldadura y su último estado de inspección." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Index,
@@ -53,7 +55,7 @@ function Index() {
           </p>
         </div>
         {isAdmin && (
-          <Button asChild className="bg-warning text-warning-foreground hover:bg-warning/90 font-semibold self-start sm:self-auto">
+          <Button asChild className="rounded-xl bg-brand text-primary-foreground shadow-glow hover:opacity-95 font-semibold self-start sm:self-auto">
             <Link to="/admin">
               <Shield className="h-4 w-4 mr-2" />
               Administrar recursos
@@ -63,59 +65,24 @@ function Index() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <button
-          onClick={() => setStatusFilter("all")}
-          className={`text-left rounded-lg border p-3.5 transition-all ${
-            statusFilter === "all" ? "ring-2 ring-primary border-primary bg-primary/5" : "bg-card hover:border-muted-foreground/30"
-          }`}
-        >
-          <p className="font-display text-2xl font-bold text-foreground">{total}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Total máquinas</p>
-        </button>
-
-        <button
-          onClick={() => setStatusFilter("operativa")}
-          className={`text-left rounded-lg border p-3.5 transition-all ${
-            statusFilter === "operativa" ? "ring-2 ring-success border-success bg-success/5" : "bg-card hover:border-muted-foreground/30"
-          }`}
-        >
-          <p className="font-display text-2xl font-bold text-success">{operativas}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">En buen estado</p>
-        </button>
-
-        <button
-          onClick={() => setStatusFilter("en_revision")}
-          className={`text-left rounded-lg border p-3.5 transition-all ${
-            statusFilter === "en_revision" ? "ring-2 ring-amber-500 border-amber-500 bg-amber-500/5" : "bg-card hover:border-muted-foreground/30"
-          }`}
-        >
-          <p className="font-display text-2xl font-bold text-amber-500">{enRevision}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Para revisión</p>
-        </button>
-
-        <button
-          onClick={() => setStatusFilter("mantenimiento")}
-          className={`text-left rounded-lg border p-3.5 transition-all ${
-            statusFilter === "mantenimiento" ? "ring-2 ring-destructive border-destructive bg-destructive/5" : "bg-card hover:border-muted-foreground/30"
-          }`}
-        >
-          <p className="font-display text-2xl font-bold text-destructive">{mantenimiento}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">En mantenimiento</p>
-        </button>
+        <KpiCard icon={Factory} tone="primary" value={total} label="Total máquinas" active={statusFilter === "all"} onClick={() => setStatusFilter("all")} />
+        <KpiCard icon={CheckCircle2} tone="success" value={operativas} label="Buen estado" active={statusFilter === "operativa"} onClick={() => setStatusFilter("operativa")} />
+        <KpiCard icon={AlertTriangle} tone="warning" value={enRevision} label="Para revisión" active={statusFilter === "en_revision"} onClick={() => setStatusFilter("en_revision")} />
+        <KpiCard icon={Wrench} tone="destructive" value={mantenimiento} label="En mantenimiento" active={statusFilter === "mantenimiento"} onClick={() => setStatusFilter("mantenimiento")} />
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="group relative">
+        <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" strokeWidth={2.25} />
         <Input
-          placeholder="Buscar máquina por código, modelo, marca o ubicación..."
+          placeholder="Buscar por código, modelo, marca o ubicación..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-9 h-11 bg-card"
+          className="h-12 rounded-2xl border-transparent bg-card pl-11 shadow-card transition-all focus-visible:border-primary/40 focus-visible:ring-4 focus-visible:ring-primary/15"
         />
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-12 rounded-lg border bg-card p-6">
+        <div className="text-center py-12 rounded-2xl bg-card p-6 shadow-card">
           <p className="text-lg font-semibold text-muted-foreground">No se encontraron máquinas con los filtros actuales.</p>
           <Button
             variant="outline"
@@ -136,7 +103,7 @@ function Index() {
               key={m.id}
               to="/maquinas/$id"
               params={{ id: m.id }}
-              className="group overflow-hidden rounded-lg border bg-card shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-primary hover:shadow-lift"
+              className="group overflow-hidden rounded-2xl border border-transparent bg-card shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lift"
             >
               <div className="relative">
                 <MachinePhoto className="h-40" />
@@ -149,7 +116,7 @@ function Index() {
                   <p className="text-sm text-muted-foreground">
                     {m.brand} · {Array.isArray(m.weldType) ? m.weldType.join(" / ") : m.weldType}
                   </p>
-                  <p className="text-xs text-muted-foreground/80 mt-1">📍 {m.location}</p>
+                  <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground"><MapPin className="h-3.5 w-3.5 text-primary/70" />{m.location}</p>
                 </div>
                 <ChevronRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary shrink-0" />
               </div>
