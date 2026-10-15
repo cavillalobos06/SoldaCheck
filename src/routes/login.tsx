@@ -13,6 +13,10 @@ export const Route = createFileRoute("/login")({
     meta: [
       { title: "Iniciar sesión — SoldaCheck" },
       { name: "description", content: "Acceso seguro a la plataforma SoldaCheck." },
+      { property: "og:title", content: "Iniciar sesión — SoldaCheck" },
+      { property: "og:description", content: "Acceso seguro a la plataforma SoldaCheck." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: LoginPage,
@@ -54,7 +58,7 @@ function LoginPage() {
 
   if (user) {
     return (
-      <CenteredCard>
+      <CenteredCard className="mx-4 my-6 sm:mx-6">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success">
           <CheckCircle2 className="h-6 w-6" />
         </div>
@@ -83,12 +87,9 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative -mx-4 -my-6 flex min-h-[calc(100vh-3.5rem)] items-center justify-center overflow-hidden bg-aurora px-4 py-10 sm:-mx-6">
-      <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-primary/25 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
-
-      <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-card/60 bg-card/60 shadow-lift backdrop-blur-xl md:grid-cols-2">
-        <div className="hidden flex-col justify-between bg-brand p-10 text-primary-foreground md:flex">
+    <div className="flex min-h-[calc(100dvh-3.5rem)] w-full items-center justify-center px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+      <div className="grid w-full min-w-0 max-w-md overflow-hidden rounded-2xl border border-border bg-card shadow-lift md:max-w-5xl md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="hidden min-w-0 flex-col justify-between gap-12 bg-brand p-8 text-primary-foreground md:flex lg:p-12">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15 ring-1 ring-primary-foreground/30">
             <Flame className="h-6 w-6" />
           </span>
@@ -101,9 +102,9 @@ function LoginPage() {
           <p className="text-xs text-primary-foreground/60">SoldaCheck · Gestión de soldadura</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5 p-8 sm:p-10">
+        <form onSubmit={handleSubmit} className="min-w-0 space-y-5 p-5 sm:p-8 lg:p-12">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Bienvenido de nuevo</h1>
+            <h1 className="text-2xl font-bold">Bienvenido de nuevo</h1>
             <p className="mt-1 text-sm text-muted-foreground">Ingresa para gestionar tus máquinas.</p>
           </div>
 
@@ -157,22 +158,24 @@ function LoginPage() {
           <div className="space-y-2 border-t pt-4">
             <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Accesos de prueba</p>
             <div className="grid grid-cols-2 gap-2">
-              <button
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => handleQuickLogin("admin@example.com")}
-                className="flex flex-col items-center rounded-xl border bg-card p-2.5 text-xs transition-all hover:border-primary/40 hover:bg-primary/5"
+                className="h-auto min-w-0 flex-col gap-1 whitespace-normal rounded-xl bg-card p-2.5 text-xs hover:border-primary/40 hover:bg-primary/5"
               >
                 <span className="flex items-center gap-1 font-semibold"><Shield className="h-3.5 w-3.5 text-primary" /> Admin</span>
-                <span className="text-[10px] text-muted-foreground">admin@example.com</span>
-              </button>
-              <button
+                <span className="max-w-full break-all text-[10px] text-muted-foreground">admin@example.com</span>
+              </Button>
+              <Button
+                variant="outline"
                 type="button"
                 onClick={() => handleQuickLogin("user@example.com")}
-                className="flex flex-col items-center rounded-xl border bg-card p-2.5 text-xs transition-all hover:border-primary/40 hover:bg-primary/5"
+                className="h-auto min-w-0 flex-col gap-1 whitespace-normal rounded-xl bg-card p-2.5 text-xs hover:border-primary/40 hover:bg-primary/5"
               >
                 <span className="flex items-center gap-1 font-semibold"><Wrench className="h-3.5 w-3.5 text-primary" /> Técnico</span>
-                <span className="text-[10px] text-muted-foreground">user@example.com</span>
-              </button>
+                <span className="max-w-full break-all text-[10px] text-muted-foreground">user@example.com</span>
+              </Button>
             </div>
           </div>
         </form>
