@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { CenteredCard, CardActions } from "@/components/CenteredCard";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const Route = createFileRoute("/login")({
@@ -54,41 +54,31 @@ function LoginPage() {
 
   if (user) {
     return (
-      <div className="max-w-md mx-auto py-12">
-        <Card className="shadow-lift border-primary/20">
-          <CardHeader className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success mb-2">
-              <CheckCircle2 className="h-6 w-6" />
-            </div>
-            <CardTitle>Sesión activa</CardTitle>
-            <CardDescription>
-              Has iniciado sesión como <strong className="text-foreground">{user.name}</strong> ({user.email})
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="rounded-lg bg-muted p-3 text-sm flex items-center justify-between">
-              <span className="text-muted-foreground">Rol actual:</span>
-              <span className="font-semibold uppercase tracking-wider text-xs px-2 py-0.5 rounded bg-background border">
-                {user.role === "admin" ? "👑 Administrador" : "👷 Técnico"}
-              </span>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            {isAdmin ? (
-              <Button asChild className="w-full bg-warning text-warning-foreground hover:bg-warning/90 font-semibold">
-                <Link to="/admin">Ir al Panel de Administrador</Link>
-              </Button>
-            ) : (
-              <Button asChild className="w-full">
-                <Link to="/">Ir al Inventario de Máquinas</Link>
-              </Button>
-            )}
-            <Button variant="outline" onClick={logout} className="w-full">
-              Cerrar sesión
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+      <CenteredCard>
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-success/10 text-success">
+          <CheckCircle2 className="h-6 w-6" />
+        </div>
+        <h1 className="text-xl font-bold sm:text-2xl">Sesión activa</h1>
+        <p className="mt-2 break-words text-sm text-muted-foreground">
+          Has iniciado sesión como <strong className="text-foreground">{user.name}</strong>
+          <span className="block break-all">{user.email}</span>
+        </p>
+        <div className="mt-5 flex flex-col items-center justify-between gap-2 rounded-xl border border-border bg-muted/60 p-3 text-sm sm:flex-row">
+          <span className="text-muted-foreground">Rol actual</span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent-foreground">
+            {user.role === "admin" ? <Shield className="h-3.5 w-3.5" /> : <Wrench className="h-3.5 w-3.5" />}
+            {user.role === "admin" ? "Administrador" : "Técnico"}
+          </span>
+        </div>
+        <CardActions>
+          <Button variant="outline" onClick={logout} className="h-11 rounded-xl">
+            Cerrar sesión
+          </Button>
+          <Button asChild className="h-11 rounded-xl bg-primary font-semibold text-primary-foreground hover:bg-primary/90">
+            {isAdmin ? <Link to="/admin">Ir al Panel Admin</Link> : <Link to="/">Ir al Inventario</Link>}
+          </Button>
+        </CardActions>
+      </CenteredCard>
     );
   }
 
