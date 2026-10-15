@@ -12,7 +12,11 @@ import {
   RotateCcw,
   Search,
   Lock,
+  Factory,
 } from "lucide-react";
+import { AdminSidebar, SECTION_TITLES, type AdminSection } from "@/components/admin/AdminSidebar";
+import { AdminAnalytics, InspectionHistory } from "@/components/admin/AdminAnalytics";
+import { KpiCard } from "@/components/machine-ui";
 import { useAuth } from "@/lib/auth-context";
 import { api, type User, type Machine } from "@/lib/api";
 import { refreshMachines } from "@/lib/machines";
@@ -61,6 +65,7 @@ function AdminDashboard() {
   const { user, isAdmin, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
+  const [section, setSection] = useState<AdminSection>("machines");
   // Data states
   const [machines, setMachines] = useState<Machine[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -337,83 +342,52 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-5">
+    <div className="space-y-6 pb-20">
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <AdminSidebar section={section} onChange={setSection} />
+        <div className="min-w-0 flex-1 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-warning text-warning-foreground font-bold text-xs">
-              <Shield className="h-4 w-4" />
-            </span>
-            <h1 className="text-3xl font-bold tracking-tight">Panel de Administración</h1>
-          </div>
-          <p className="text-muted-foreground mt-1">
-            Gestión centralizada de recursos, ficha técnica de máquinas e inspectores del sistema.
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Panel de administración</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight">{SECTION_TITLES[section]}</h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Gestión centralizada de máquinas, inspecciones y usuarios.
           </p>
         </div>
-
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={loadData} disabled={loadingData}>
+          <Button variant="outline" size="sm" className="rounded-xl" onClick={loadData} disabled={loadingData}>
             <RotateCcw className={`h-4 w-4 mr-1.5 ${loadingData ? "animate-spin" : ""}`} />
-            Refrescar datos
+            Refrescar
           </Button>
-          <Button asChild variant="secondary" size="sm">
-            <Link to="/">Ver Inventario Público</Link>
+          <Button asChild variant="secondary" size="sm" className="rounded-xl">
+            <Link to="/">Ver inventario</Link>
           </Button>
         </div>
       </div>
 
-      {/* Notifications */}
       {successMsg && (
-        <Alert className="border-success/30 bg-success/10 text-success-foreground py-2.5">
+        <Alert className="rounded-xl border-success/30 bg-success/10 py-2.5">
           <CheckCircle2 className="h-4 w-4 text-success" />
           <AlertDescription className="text-sm font-medium">{successMsg}</AlertDescription>
         </Alert>
       )}
 
       {errorMsg && (
-        <Alert variant="destructive" className="py-2.5">
+        <Alert variant="destructive" className="rounded-xl py-2.5">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription className="text-sm">{errorMsg}</AlertDescription>
         </Alert>
       )}
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Card className="p-3 shadow-card">
-          <p className="font-display text-2xl font-bold text-foreground">{totalMachines}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Total Máquinas</p>
-        </Card>
-        <Card className="p-3 shadow-card">
-          <p className="font-display text-2xl font-bold text-success">{operativas}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">En buen estado</p>
-        </Card>
-        <Card className="p-3 shadow-card">
-          <p className="font-display text-2xl font-bold text-amber-500">{enRevision}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Para revisión</p>
-        </Card>
-        <Card className="p-3 shadow-card">
-          <p className="font-display text-2xl font-bold text-destructive">{mantenimiento}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">En mantenimiento</p>
-        </Card>
-        <Card className="p-3 shadow-card col-span-2 md:col-span-1">
-          <p className="font-display text-2xl font-bold text-primary">{users.length}</p>
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">Usuarios Registrados</p>
-        </Card>
+        <KpiCard icon={Factory} tone="primary" value={totalMachines} label="Total máquinas" />
+        <KpiCard icon={CheckCircle2} tone="success" value={operativas} label="Buen estado" />
+        <KpiCard icon={AlertTriangle} tone="warning" value={enRevision} label="Para revisión" />
+        <KpiCard icon={Wrench} tone="destructive" value={mantenimiento} label="Mantenimiento" />
+        <KpiCard icon={Users} tone="primary" value={users.length} label="Usuarios" className="col-span-2 md:col-span-1" />
       </div>
 
-      {/* Main Tabs */}
-      <Tabs defaultValue="machines" className="space-y-4">
-        <TabsList className="grid w-full max-w-md grid-cols-2">
-          <TabsTrigger value="machines" className="flex items-center gap-2">
-            <Wrench className="h-4 w-4" />
-            Máquinas y Fichas ({machines.length})
-          </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Usuarios del Sistema ({users.length})
-          </TabsTrigger>
-        </TabsList>
+      <Tabs value={section} onValueChange={(v) => setSection(v as AdminSection)} className="space-y-4">
 
         {/* ==========================================
             TAB 1: GESTIÓN DE MÁQUINAS
@@ -650,7 +624,25 @@ function AdminDashboard() {
             </Table>
           </div>
         </TabsContent>
+
+        <TabsContent value="history" className="space-y-4">
+          <InspectionHistory />
+        </TabsContent>
+
+        <TabsContent value="reports" className="space-y-4">
+          <AdminAnalytics />
+        </TabsContent>
       </Tabs>
+        </div>
+      </div>
+
+      <Button
+        onClick={handleOpenCreateMachine}
+        className="fixed bottom-6 right-6 z-30 h-14 rounded-2xl bg-brand px-5 font-semibold text-primary-foreground shadow-glow hover:opacity-95"
+      >
+        <Plus className="h-5 w-5 sm:mr-2" />
+        <span className="hidden sm:inline">Registrar nueva máquina</span>
+      </Button>
 
       {/* ==========================================
           MODAL: CREAR / EDITAR MÁQUINA
