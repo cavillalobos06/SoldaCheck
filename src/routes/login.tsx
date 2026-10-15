@@ -93,95 +93,100 @@ function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-8">
-      <Card className="shadow-lift border-muted">
-        <CardHeader className="space-y-1 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-warning text-warning-foreground mb-2">
+    <div className="relative -mx-4 -my-6 flex min-h-[calc(100vh-3.5rem)] items-center justify-center overflow-hidden bg-aurora px-4 py-10 sm:-mx-6">
+      <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-primary/25 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
+
+      <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-card/60 bg-card/60 shadow-lift backdrop-blur-xl md:grid-cols-2">
+        <div className="hidden flex-col justify-between bg-brand p-10 text-primary-foreground md:flex">
+          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary-foreground/15 ring-1 ring-primary-foreground/30">
             <Flame className="h-6 w-6" />
+          </span>
+          <div>
+            <h2 className="text-3xl font-bold leading-tight">Cada máquina, revisada a tiempo.</h2>
+            <p className="mt-3 text-sm text-primary-foreground/75">
+              Checklists diarios, historial de inspecciones y estado de la flota en un solo lugar.
+            </p>
           </div>
-          <CardTitle className="text-2xl font-bold">Acceso a SoldaCheck</CardTitle>
-          <CardDescription>
-            Ingresa tus credenciales para acceder a la gestión de máquinas
-          </CardDescription>
-        </CardHeader>
+          <p className="text-xs text-primary-foreground/60">SoldaCheck · Gestión de soldadura</p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            {error && (
-              <Alert variant="destructive" className="py-2.5">
-                <AlertDescription className="text-xs">{error}</AlertDescription>
-              </Alert>
-            )}
+        <form onSubmit={handleSubmit} className="space-y-5 p-8 sm:p-10">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Bienvenido de nuevo</h1>
+            <p className="mt-1 text-sm text-muted-foreground">Ingresa para gestionar tus máquinas.</p>
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="ej: admin@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="pl-9"
-                />
-              </div>
+          {error && (
+            <Alert variant="destructive" className="rounded-xl py-2.5">
+              <AlertDescription className="text-xs">{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Código de empleado / Correo</Label>
+            <div className="group relative">
+              <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="ej: admin@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="h-12 rounded-xl bg-card pl-11 transition-all focus-visible:border-primary/40 focus-visible:ring-4 focus-visible:ring-primary/15"
+              />
             </div>
+          </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="pl-9"
-                />
-              </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Contraseña</Label>
+            <div className="group relative">
+              <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="h-12 rounded-xl bg-card pl-11 transition-all focus-visible:border-primary/40 focus-visible:ring-4 focus-visible:ring-primary/15"
+              />
             </div>
+          </div>
 
-            <Button type="submit" disabled={loading} className="w-full font-semibold">
-              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="h-12 w-full rounded-xl bg-brand font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 hover:opacity-95"
+          >
+            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
 
-            {/* Quick Demo Credentials */}
-            <div className="pt-4 border-t space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">
-                Accesos de prueba rápidos
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin("admin@example.com")}
-                  className="flex flex-col items-center justify-center p-2.5 rounded-lg border bg-card hover:bg-warning/10 hover:border-warning text-xs transition-all text-left"
-                >
-                  <span className="font-semibold flex items-center gap-1 text-foreground">
-                    <Shield className="h-3.5 w-3.5 text-warning" /> Admin
-                  </span>
-                  <span className="text-[10px] text-muted-foreground">admin@example.com</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin("user@example.com")}
-                  className="flex flex-col items-center justify-center p-2.5 rounded-lg border bg-card hover:bg-blue-50 hover:border-blue-300 dark:hover:bg-blue-950/20 text-xs transition-all text-left"
-                >
-                  <span className="font-semibold flex items-center gap-1 text-foreground">
-                    <Wrench className="h-3.5 w-3.5 text-blue-500" /> Técnico
-                  </span>
-                  <span className="text-[10px] text-muted-foreground">user@example.com</span>
-                </button>
-              </div>
+          <div className="space-y-2 border-t pt-4">
+            <p className="text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">Accesos de prueba</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin("admin@example.com")}
+                className="flex flex-col items-center rounded-xl border bg-card p-2.5 text-xs transition-all hover:border-primary/40 hover:bg-primary/5"
+              >
+                <span className="flex items-center gap-1 font-semibold"><Shield className="h-3.5 w-3.5 text-primary" /> Admin</span>
+                <span className="text-[10px] text-muted-foreground">admin@example.com</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin("user@example.com")}
+                className="flex flex-col items-center rounded-xl border bg-card p-2.5 text-xs transition-all hover:border-primary/40 hover:bg-primary/5"
+              >
+                <span className="flex items-center gap-1 font-semibold"><Wrench className="h-3.5 w-3.5 text-primary" /> Técnico</span>
+                <span className="text-[10px] text-muted-foreground">user@example.com</span>
+              </button>
             </div>
-          </CardContent>
+          </div>
         </form>
-      </Card>
+      </div>
     </div>
   );
 }
