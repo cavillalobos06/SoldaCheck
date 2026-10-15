@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- The login route owns its full-width page spacing; the root main applies constrained content gutters only to other routes, preventing background seams.
