@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { CenteredCard, CardActions } from "@/components/CenteredCard";
 import { useState, useEffect } from "react";
 import {
   Shield,
