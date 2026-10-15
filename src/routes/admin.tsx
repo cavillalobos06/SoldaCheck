@@ -153,23 +153,23 @@ function AdminDashboard() {
 
   if (!user || !isAdmin) {
     return (
-      <div className="max-w-md mx-auto py-16 text-center space-y-4">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+      <CenteredCard>
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-destructive/10 text-destructive">
           <Lock className="h-7 w-7" />
         </div>
-        <h1 className="text-2xl font-bold">Acceso Restringido</h1>
-        <p className="text-sm text-muted-foreground">
+        <h1 className="text-xl font-bold sm:text-2xl">Acceso Restringido</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Esta sección está reservada exclusivamente para el Administrador del sistema.
         </p>
-        <div className="pt-2 flex justify-center gap-3">
-          <Button asChild variant="outline">
+        <CardActions>
+          <Button asChild variant="outline" className="h-11 rounded-xl">
             <Link to="/">Volver al Inventario</Link>
           </Button>
-          <Button asChild className="bg-warning text-warning-foreground hover:bg-warning/90">
+          <Button asChild className="h-11 rounded-xl bg-primary font-semibold text-primary-foreground hover:bg-primary/90">
             <Link to="/login">Iniciar sesión como Admin</Link>
           </Button>
-        </div>
-      </div>
+        </CardActions>
+      </CenteredCard>
     );
   }
 
