@@ -83,7 +83,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative -mx-4 -my-6 flex min-h-[calc(100vh-3.5rem)] items-center justify-center overflow-hidden bg-aurora px-4 py-10 sm:-mx-6">
+    <div className="relative left-1/2 right-1/2 -mx-[50vw] -my-6 flex min-h-[calc(100vh-3.5rem)] w-screen items-center justify-center overflow-hidden bg-aurora px-4 py-10">
       <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-primary/25 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-primary/30 blur-3xl" />
 

@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: pixel_perfect_db
+    container_name: app_db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-pixel_perfect_db}
@@ -24,7 +24,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: pixel_perfect_backend
+    container_name: app_backend
     restart: unless-stopped
     depends_on:
       db:
@@ -50,7 +50,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: pixel_perfect_frontend
+    container_name: app_frontend
     restart: unless-stopped
     depends_on:
       - backend
