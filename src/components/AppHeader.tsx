@@ -16,16 +16,16 @@ export function AppHeader() {
 
   return (
     <header className="sticky top-0 z-20 bg-brand text-primary-foreground shadow-glow">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary-foreground/15 ring-1 ring-primary-foreground/30 backdrop-blur">
+      <div className="mx-auto grid h-14 max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:flex sm:justify-between sm:px-6">
+        <div className="flex min-w-0 items-center gap-4 lg:gap-6">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-foreground/15 ring-1 ring-primary-foreground/30 backdrop-blur">
               <Flame className="h-5 w-5" />
             </span>
-            <span className="font-display text-lg font-bold tracking-wide">SoldaCheck</span>
+            <span className="truncate font-display text-lg font-bold">SoldaCheck</span>
           </Link>
 
-          <nav className="hidden sm:flex items-center gap-4 text-sm font-medium">
+          <nav className="hidden md:flex shrink-0 items-center gap-4 text-sm font-medium">
             <Link
               to="/"
               className="text-primary-foreground/80 hover:text-primary-foreground transition-colors"
@@ -45,11 +45,11 @@ export function AppHeader() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex flex-col items-end text-xs">
-                <span className="font-semibold text-primary-foreground">{user.name}</span>
+              <div className="hidden md:flex min-w-0 max-w-40 flex-col items-end text-xs">
+                <span className="w-full truncate text-right font-semibold text-primary-foreground">{user.name}</span>
                 <span className="text-[10px] uppercase tracking-wider text-primary-foreground/70 flex items-center gap-1">
                   {user.role === "admin" ? (
                     <span className="font-bold">Administrador</span>
@@ -63,7 +63,7 @@ export function AppHeader() {
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                className="hidden sm:inline-flex h-8 px-2 text-xs rounded-xl text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/15"
+                className="hidden md:inline-flex h-8 px-2 text-xs rounded-xl text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/15"
                 title="Cerrar sesión"
               >
                 <LogOut className="h-4 w-4 mr-1" />
@@ -75,7 +75,7 @@ export function AppHeader() {
               asChild
               size="sm"
               variant="ghost"
-              className="hidden sm:inline-flex h-9 rounded-xl border border-primary-foreground/30 bg-primary-foreground/15 px-4 text-xs font-semibold text-primary-foreground backdrop-blur-md hover:bg-primary-foreground/25 hover:text-primary-foreground"
+              className="hidden md:inline-flex h-9 rounded-xl border border-primary-foreground/30 bg-primary-foreground/15 px-4 text-xs font-semibold text-primary-foreground backdrop-blur-md hover:bg-primary-foreground/25 hover:text-primary-foreground"
             >
               <Link to="/login">
                 <LogIn className="h-3.5 w-3.5 mr-1" />
@@ -83,22 +83,25 @@ export function AppHeader() {
               </Link>
             </Button>
           )}
-          <button
+          <Button
+            variant="ghost"
+            size="icon"
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={open}
-            className="sm:hidden flex h-9 w-9 items-center justify-center rounded-xl bg-primary-foreground/15"
+            aria-controls="mobile-navigation"
+            className="md:hidden shrink-0 rounded-xl bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/25 hover:text-primary-foreground"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {open && (
-        <nav className="sm:hidden border-t border-primary-foreground/20 px-4 pb-4 pt-2 text-sm font-medium">
+        <nav id="mobile-navigation" className="md:hidden border-t border-primary-foreground/20 px-4 pb-4 pt-2 text-sm font-medium">
           {user && (
-            <div className="py-2 text-xs text-primary-foreground/80">
+            <div className="break-words py-2 text-xs text-primary-foreground/80">
               <span className="font-semibold text-primary-foreground">{user.name}</span> ·{" "}
               {user.role === "admin" ? "Administrador" : "Técnico"}
             </div>
@@ -112,13 +115,14 @@ export function AppHeader() {
             </Link>
           )}
           {user ? (
-            <button
+            <Button
+              variant="ghost"
               type="button"
               onClick={() => { setOpen(false); handleLogout(); }}
-              className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left hover:bg-primary-foreground/15"
+              className="h-auto w-full justify-start rounded-xl px-3 py-2.5 text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground"
             >
               <LogOut className="h-4 w-4" /> Cerrar sesión
-            </button>
+            </Button>
           ) : (
             <Link to="/login" onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-xl px-3 py-2.5 hover:bg-primary-foreground/15">
               <LogIn className="h-4 w-4" /> Iniciar sesión

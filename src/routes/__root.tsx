@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -117,13 +118,14 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const isLoginPage = useRouterState({ select: (state) => state.location.pathname === "/login" });
 
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <AppHeader />
-        <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+        <main className={isLoginPage ? "w-full bg-accent/30" : "mx-auto w-full max-w-6xl px-4 py-6 sm:px-6"}>
           <Outlet />
         </main>
       </AuthProvider>
